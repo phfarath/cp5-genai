@@ -21,7 +21,8 @@ ROTAS = [
     ("baseline", "Baseline\n(sem FT)"),
     ("lora_default", "LoRA\ndefault"),
     ("lora_r8_lr1e4", "LoRA\nr8 lr1e4"),
-    ("lora_r16_t23", "LoRA\n+T2→T3"),
+    ("lora_r16_t23", "LoRA\n360M"),
+    ("lora_r16_1b7", "LoRA\n1.7B"),
 ]
 
 METRICAS = [

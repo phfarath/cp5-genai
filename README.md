@@ -96,10 +96,34 @@ Gerados por `scripts/generate_synthetic.py` (3 clusters):
 
 ## Resultados
 
-- Adapter: `runs/lora_r16_1b7/`
-- Métricas: `runs/resultados/`
-- Bake-off: `runs/bakeoff.png`
-- Compressão no Gradio (exemplo Auth JWT): ~721 → ~200 caracteres (**~3.5×**) no SLM; heurística ~7× (mais curta, sem narrativa)
+### Hiperparâmetros testados (GPU)
+
+| tag | modelo | r | lr | epochs | T2→T3 | train loss |
+|-----|--------|---|----|--------|-------|------------|
+| baseline | 360M Instruct | — | — | — | — | — |
+| default | 360M LoRA | 16 | 2e-4 | 2 | sim | 2.32 |
+| r8_lr1e4 | 360M LoRA | 8 | 1e-4 | 3 | não | 2.21 |
+| r16_t23 | 360M LoRA | 16 | 2e-4 | 6 | sim | 1.73 |
+| r16_1b7 | **1.7B LoRA** | 16 | 1e-4 | 3 | sim | 1.85 |
+
+### Avaliação no gabarito (12 itens held-out)
+
+Métricas por palavras-chave / abstenção (`scripts/evaluate.py`):
+
+| rota | acerto geral | factual | síntese | abstenção OK |
+|------|--------------|---------|---------|--------------|
+| baseline | 33.3% | 60% | 25% | 0% |
+| default | 25.0% | 40% | 25% | 0% |
+| r8_lr1e4 | 25.0% | 40% | 25% | 0% |
+| **r16_t23** | **50.0%** | **80%** | **50%** | 0% |
+| r16_1b7 | 33.3% | 40% | 50% | 0% |
+
+Melhor no gabarito automático: `r16_t23` (360M). O `r16_1b7` é o usado no Gradio (melhor prosa / compressão narrativa com few-shot). Abstenção permanece 0% — o fine-tune favorece responder sempre (mesmo padrão observado na disciplina).
+
+### Compressão no frontend
+
+Exemplo Auth JWT: ~721 → ~200 caracteres (**~3.5×**) no SLM; heurística ~7× (mais curta, sem narrativa).  
+Adapter principal: `runs/lora_r16_1b7/` · JSON: `runs/resultados/` · gráfico: `runs/bakeoff.png`
 
 ### Evidências
 

@@ -22,10 +22,9 @@ não narra a decisão (ex.: HS256→RS256). O SLM gera o resumo narrativo.
 
 ---
 
-## Entrega (o que o professor pediu)
+## Entrega
 
 Pelo enunciado, a entrega é **código + documentação no GitHub** e **print da GPU**.
-**Não há pedido de vídeo** do treinamento.
 
 Detalhes e checklist: [`ENTREGA.md`](ENTREGA.md).
 

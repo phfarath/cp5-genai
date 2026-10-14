@@ -13,7 +13,7 @@ Small Language Model local (SmolLM2) treinado com LoRA para **comprimir memória
 
 | Nome | RM |
 |------|-----|
-| Pedro Farath | |
+| Pedro Farath | 98608 |
 | Juliana Maita | 99224 |
 | João Victor Morais | 550453 |
 | Luana Cabezaolias | 99320 |

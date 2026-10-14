@@ -1,4 +1,4 @@
-﻿"""Prévia dos dados sintéticos para a entrega."""
+﻿"""Prévia dos dados sintéticos."""
 import _root  # noqa: E402  # adiciona raiz ao path
 import json
 from pathlib import Path

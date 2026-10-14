@@ -1,46 +1,46 @@
 # Episodic Pyramid SLM
 
-Laboratório acadêmico: treinar um **Small Language Model local (SmolLM2)** para
-**comprimir memória episódica hierárquica** (pirâmide Strata).
+Small Language Model local (SmolLM2) treinado com LoRA para **comprimir memória episódica hierárquica**: traces Tier 1 → milestones Tier 2 → narrativa de sessão Tier 3.
 
-| Campo | Valor |
-|-------|--------|
-| LLM principal | `HuggingFaceTB/SmolLM2-1.7B-Instruct` + LoRA `r16_1b7` |
-| Problema | Compressão Tier 1→2 (milestones) e Tier 2→3 (narrativa) |
-| Método | LoRA (SFT) na GPU local (RTX 3060) |
-| Frontend | Gradio (`app.py`) |
-| Entrega | 15/10/2026 — ver [`ENTREGA.md`](ENTREGA.md) |
+| | |
+|---|---|
+| **Modelo** | `HuggingFaceTB/SmolLM2-1.7B-Instruct` + LoRA (`r=16`, lr=`1e-4`, 3 epochs) |
+| **GPU** | NVIDIA GeForce RTX 3060 12 GB (CUDA / PyTorch `cu128`, bf16) |
+| **Problema** | Sumarização de clusters episódicos (Auth JWT, SQLite pool, CDC outbox) |
+| **Frontend** | Gradio — `python app.py` |
 
 ```
-Tier 1 (traces)  --SLM-->  Tier 2 (milestones)  --SLM-->  Tier 3 (narrativa)
+Tier 1 (traces)  -->  Tier 2 (milestones)  -->  Tier 3 (narrativa de sessão)
 ```
 
-Pelo enunciado, a entrega é **código + documentação no GitHub** e **print da GPU**.
+O rollup heurístico de referência usa o template  
+`[Milestone Rollup] <medoid> | N outcomes, M files`.  
+O SLM gera o resumo narrativo (ex.: migração HS256→RS256).
 
 ---
 
-## Estrutura (entrega)
+## Estrutura
 
-Na **raiz** ficam só o essencial que o professor precisa abrir:
-
-| Arquivo | Papel |
-|---------|--------|
-| `app.py` | Frontend Gradio (prompt → compressão) |
-| `train_lora.py` | Treino LoRA na GPU |
-| `config.py` / `utils.py` / `compressao.py` | Config e runtime do app/treino |
-| `data/` | Datasets sintéticos |
-| `runs/` | Adapters treinados + métricas |
-| `docs/prints/` | Prints da GPU / Gradio |
-| `scripts/` | Geração de dados, baseline, eval, bakeoff (suporte) |
+```
+app.py              # frontend Gradio
+train_lora.py       # treinamento LoRA
+config.py           # hiperparâmetros e paths
+utils.py            # carga/geração/VRAM
+compressao.py       # heurística + SLM + métricas
+data/               # datasets sintéticos e gabarito
+runs/               # adapters e resultados
+scripts/            # geração de dados, baseline, avaliação, bake-off
+docs/prints/        # evidências de GPU e execução
+```
 
 ---
 
-## Setup (Windows + GPU)
+## Setup
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\activate
-python -m pip install -U pip
+pip install -U pip
 pip install torch --index-url https://download.pytorch.org/whl/cu128
 pip install -r requirements.txt
 python scripts/smoke_test.py
@@ -48,48 +48,51 @@ python scripts/smoke_test.py
 
 ---
 
-## Uso principal (entrega)
+## Treino e inferência
 
 ```powershell
-# (opcional) regenerar dados sinteticos
 python scripts/generate_synthetic.py
 
-# treinar
-python train_lora.py --tag r16_1b7 --modelo HuggingFaceTB/SmolLM2-1.7B-Instruct --r 16 --lr 1e-4 --epochs 3 --include-t23
+python train_lora.py --tag r16_1b7 `
+  --modelo HuggingFaceTB/SmolLM2-1.7B-Instruct `
+  --r 16 --lr 1e-4 --epochs 3 --include-t23
 
-# frontend
 python app.py
-# -> http://127.0.0.1:7860
+# http://127.0.0.1:7860
 ```
 
----
-
-## Scripts de suporte
+Avaliação / comparação:
 
 ```powershell
-python scripts/preview_dados.py
 python scripts/baseline.py
 python scripts/evaluate.py --tag r16_1b7 --nome lora_r16_1b7
 python scripts/bakeoff.py
-python scripts/sweep.py
 ```
 
 ---
 
-## Dados sintéticos
+## Dados
 
-| Arquivo | Qtd | Conteúdo |
-|---------|-----|----------|
-| `data/episodes_t1.jsonl` | 72+ | Episódios Tier 1 |
-| `data/sft_t1_to_t2.jsonl` | 63+ | Pares SFT milestone |
-| `data/sft_t2_to_t3.jsonl` | 4 | Pares SFT narrativa |
-| `data/gabarito.json` | 12 | Held-out |
+Gerados por `scripts/generate_synthetic.py` (3 clusters):
 
-Clusters: `task-auth-jwt` · `task-sqlite-pool` · `task-cdc-outbox`
+| Arquivo | Conteúdo |
+|---------|----------|
+| `data/episodes_t1.jsonl` | Episódios Tier 1 |
+| `data/sft_t1_to_t2.jsonl` | Pares SFT compressão milestone |
+| `data/sft_t2_to_t3.jsonl` | Pares SFT narrativa de sessão |
+| `data/gabarito.json` | Avaliação held-out (factual / síntese / armadilha) |
 
 ---
 
-## Resultados (RTX 3060)
+## Resultados
 
-Demo Gradio: **~3.5×** compressão no SLM (heurística ~7×, sem narrativa).  
-Adapter: `runs/lora_r16_1b7/`. Print: `docs/prints/01-gpu-gradio-nvidia.png`.
+- Adapter: `runs/lora_r16_1b7/`
+- Métricas: `runs/resultados/`
+- Bake-off: `runs/bakeoff.png`
+- Compressão no Gradio (exemplo Auth JWT): ~721 → ~200 caracteres (**~3.5×**) no SLM; heurística ~7× (mais curta, sem narrativa)
+
+### Evidências
+
+![GPU + Gradio](docs/prints/01-gpu-gradio-nvidia.png)
+
+![Bake-off](docs/prints/03-bakeoff.png)

@@ -1,4 +1,5 @@
-"""Valida GPU + libs + download do modelo. Precisa terminar com === AMBIENTE OK ===."""
+﻿"""Valida GPU + libs + download do modelo. Precisa terminar com === AMBIENTE OK ===."""
+import _root  # noqa: E402  # adiciona raiz ao path
 from config import MODELO_CHAT, DEVICE, resumo_ambiente
 from utils import carregar, chat, liberar, medir
 

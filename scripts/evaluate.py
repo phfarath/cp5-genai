@@ -1,6 +1,7 @@
-"""Avalia um adapter LoRA (ou o modelo base) no gabarito."""
+﻿"""Avalia um adapter LoRA (ou o modelo base) no gabarito."""
 from __future__ import annotations
 
+import _root  # noqa: E402  # adiciona raiz ao path
 import argparse
 from pathlib import Path
 

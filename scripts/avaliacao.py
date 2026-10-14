@@ -1,6 +1,7 @@
-"""Avaliação com gabarito held-out (mesmo critério da aula)."""
+﻿"""Avaliação com gabarito held-out (mesmo critério da aula)."""
 from __future__ import annotations
 
+import _root  # noqa: E402  # adiciona raiz ao path
 import json
 import unicodedata
 
@@ -21,7 +22,9 @@ def normalizar(texto: str) -> str:
 def carregar_gabarito(nome: str = "gabarito.json") -> list[dict]:
     caminho = DADOS / nome
     if not caminho.exists():
-        raise FileNotFoundError(f"Gabarito não encontrado: {caminho}. Rode generate_synthetic.py")
+        raise FileNotFoundError(
+            f"Gabarito não encontrado: {caminho}. Rode: python scripts/generate_synthetic.py"
+        )
     return json.loads(caminho.read_text(encoding="utf-8"))
 
 

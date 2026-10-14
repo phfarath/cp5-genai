@@ -1,4 +1,5 @@
-"""Baseline: SmolLM2 Instruct SEM fine-tune no gabarito da pyramid."""
+﻿"""Baseline: SmolLM2 Instruct SEM fine-tune no gabarito da pyramid."""
+import _root  # noqa: E402  # adiciona raiz ao path
 from config import MODELO_CHAT, SISTEMA_T1_T2, resumo_ambiente
 from avaliacao import avaliar_rota
 from utils import carregar, chat, fixar_seed, liberar, medir, salvar_resultado

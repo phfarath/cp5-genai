@@ -22,19 +22,29 @@
 
 ---
 
+## Organização do repo
+
+```
+app.py              <- frontend (abrir/demonstrar)
+train_lora.py       <- treinamento GPU
+config.py utils.py compressao.py
+data/               <- datasets sinteticos
+runs/lora_r16_1b7/  <- adapter treinado
+docs/prints/        <- prints GPU + Gradio
+scripts/            <- geracao de dados, eval, bakeoff (suporte)
+```
+
 ## O que subir no GitHub
 
 **Incluir**
-- Todo o código `.py`, `requirements.txt`, `README.md`, `ENTREGA.md`
+- Código da raiz + `scripts/`, `requirements.txt`, `README.md`, `ENTREGA.md`
 - `data/` (sintéticos — leves)
-- `runs/resultados/*.json` e `runs/bakeoff.png` (se existir)
-- Adapter principal: `runs/lora_r16_1b7/adapter/` (~70 MB — ok)
-- Prints em `docs/prints/` (GPU + Gradio)
+- `runs/resultados/*.json` e adapters
+- Prints em `docs/prints/`
 
 **Não incluir**
 - `.venv/`
 - checkpoints intermediários `runs/lora_*/checkpoint-*`
-- outros adapters grandes se quiser economizar (360M opcional)
 
 ---
 

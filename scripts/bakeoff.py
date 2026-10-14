@@ -1,4 +1,4 @@
-"""
+﻿"""
 Bake-off: heurística Strata vs baseline vs LoRA(s).
 
 Lê runs/resultados/*.json e monta tabela + gráfico.
@@ -6,6 +6,7 @@ Também imprime comparação qualitativa heuristic vs gold.
 """
 from __future__ import annotations
 
+import _root  # noqa: E402  # adiciona raiz ao path
 import json
 
 import matplotlib

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Gera dados sintéticos da Hierarchical Episodic Memory Pyramid.
 
 Produz:
@@ -13,6 +13,7 @@ Baseado nos 3 clusters do eval Strata:
 """
 from __future__ import annotations
 
+import _root  # noqa: E402  # adiciona raiz ao path
 import hashlib
 import json
 import random

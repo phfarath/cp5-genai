@@ -9,6 +9,16 @@ Small Language Model local (SmolLM2) treinado com LoRA para **comprimir memória
 | **Problema** | Sumarização de clusters episódicos (Auth JWT, SQLite pool, CDC outbox) |
 | **Frontend** | Gradio — `python app.py` |
 
+### Integrantes
+
+| Nome | RM |
+|------|-----|
+| Pedro Farath | |
+| Juliana Maita | 99224 |
+| João Victor Morais | 550453 |
+| Luana Cabezaolias | 99320 |
+| Lucca Vilaça | 551538 |
+
 ```
 Tier 1 (traces)  -->  Tier 2 (milestones)  -->  Tier 3 (narrativa de sessão)
 ```
